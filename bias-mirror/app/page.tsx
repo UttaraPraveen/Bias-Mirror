@@ -23,15 +23,28 @@ export default function Home() {
       />
 
       <button
-        style={{
-          marginTop: "1rem",
-          padding: "0.75rem 1.25rem",
-          fontSize: "1rem",
-          cursor: "pointer"
-        }}
-      >
-        Analyze
-      </button>
+  onClick={async () => {
+    const res = await fetch("/api/analyze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: "Remote work makes people lazy."
+      })
+    });
+
+    const data = await res.json();
+    console.log(data);
+  }}
+  style={{
+    marginTop: "1rem",
+    padding: "0.75rem 1.25rem",
+    fontSize: "1rem",
+    cursor: "pointer"
+  }}
+>
+  Analyze
+</button>
+
     </main>
   );
 }
