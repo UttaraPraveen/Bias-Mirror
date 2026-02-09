@@ -30,7 +30,6 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input: inputText }),
       });
-
       const data = await res.json();
       setResult(data);
     } catch (error) {
@@ -41,106 +40,101 @@ export default function Home() {
   };
 
   return (
-    <main style={{ padding: "3rem", maxWidth: "800px", margin: "0 auto", fontFamily: "sans-serif", lineHeight: "1.6" }}>
-      <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "1rem" }}>Bias Mirror</h1>
+    <div className="min-h-screen text-slate-900 selection:bg-indigo-100">
+      {/* Navigation */}
+      <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+        <div className="flex gap-8 text-sm font-medium text-slate-600 bg-white/50 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 shadow-sm">
+          <span className="cursor-pointer hover:text-black">Tool</span>
+          <span className="cursor-pointer hover:text-black">Science</span>
+          <span className="cursor-pointer hover:text-black">FAQs</span>
+          <span className="cursor-pointer hover:text-black">About</span>
+        </div>
+        <button className="bg-black text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-slate-800 transition-all">
+          <span>Get Started</span>
+          <span className="text-lg">→</span>
+        </button>
+      </nav>
 
-      <p style={{ color: "#666", fontSize: "1.1rem" }}>
-        Enter an opinion to see the hidden complexity behind it.
-      </p>
+      <main className="max-w-4xl mx-auto px-6 pt-20 pb-32 text-center">
+        {/* Badge */}
+        <div className="inline-block bg-white px-4 py-1.5 rounded-full shadow-sm border border-slate-100 mb-8 animate-fade-in">
+          <span className="text-[10px] font-bold tracking-widest uppercase text-slate-500">
+            Bias Reflection Engine
+          </span>
+        </div>
 
-      <textarea
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        placeholder="e.g., Remote work makes people lazy..."
-        style={{
-          width: "100%",
-          height: "120px",
-          marginTop: "1.5rem",
-          padding: "1rem",
-          fontSize: "1rem",
-          borderRadius: "12px",
-          border: "1px solid #ddd",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-          resize: "none"
-        }}
-      />
+        {/* Hero Section */}
+        <h1 className="text-5xl md:text-7xl font-serif font-medium tracking-tight text-slate-900 mb-6 leading-[1.1]">
+          See your biases reflected. <br />
+          <span className="italic text-slate-700">Shift your view.</span>
+        </h1>
+        
+        <p className="text-lg text-slate-500 mb-12 max-w-2xl mx-auto leading-relaxed">
+          The Bias Mirror helps you uncover hidden complexity in your opinions by reflecting them through multiple objective lenses.
+        </p>
 
-      <button
-        onClick={handleAnalyze}
-        disabled={loading}
-        style={{
-          marginTop: "1.5rem",
-          padding: "1rem 2rem",
-          fontSize: "1rem",
-          fontWeight: "bold",
-          cursor: loading ? "not-allowed" : "pointer",
-          backgroundColor: loading ? "#ccc" : "#000",
-          color: "#fff",
-          border: "none",
-          borderRadius: "50px",
-          transition: "background 0.2s"
-        }}
-      >
-        {loading ? "Reflecting..." : "Analyze Perspectives"}
-      </button>
+        {/* Input Area */}
+        <div className="relative max-w-2xl mx-auto mb-16">
+          <textarea
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="Enter an opinion (e.g., Remote work makes people lazy...)"
+            className="w-full h-32 p-6 rounded-3xl border border-slate-200 bg-white/70 backdrop-blur-sm shadow-xl focus:ring-2 focus:ring-slate-400 focus:outline-none text-lg transition-all resize-none"
+          />
+          <button
+            onClick={handleAnalyze}
+            disabled={loading}
+            className="absolute bottom-4 right-4 bg-black text-white px-6 py-2 rounded-full font-medium hover:scale-105 transition-transform disabled:bg-slate-400 flex items-center gap-2"
+          >
+            {loading ? "Reflecting..." : "Analyze"}
+            {!loading && <span className="text-lg">→</span>}
+          </button>
+        </div>
 
-      {/* --- RESULTS SECTION --- */}
-      {result && (
-        <div style={{ marginTop: "3rem", animation: "fadeIn 0.5s ease-in" }}>
-          
-          {/* 1. Neutral Reframe (The Anchor) */}
-          <div style={{ background: "#f0f9ff", padding: "1.5rem", borderRadius: "12px", borderLeft: "5px solid #0ea5e9", marginBottom: "2rem" }}>
-            <h3 style={{ color: "#0284c7", margin: "0 0 0.5rem 0", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "1px" }}>Neutral Reality</h3>
-            <p style={{ fontSize: "1.2rem", margin: 0 }}>{result.neutral_reframe}</p>
-          </div>
+        {/* --- RESULTS SECTION --- */}
+        {result && (
+          <div className="animate-fade-in space-y-8 text-left">
+            <div className="bg-blue-50/50 border border-blue-100 p-8 rounded-[32px]">
+              <h3 className="text-xs font-bold text-blue-500 uppercase tracking-widest mb-3">Neutral Reality</h3>
+              <p className="text-2xl text-slate-800 font-medium">{result.neutral_reframe}</p>
+            </div>
 
-          {/* 2. The Bias Mirror (The "What If") */}
-          <div style={{ marginBottom: "2rem" }}>
-            <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}>🪞 The Mirror Reflection</h3>
-            <p style={{ fontSize: "1.1rem", fontStyle: "italic", color: "#444" }}>"{result.bias_mirror}"</p>
-          </div>
+            <div className="grid md:grid-rows-2 md:grid-cols-2 gap-4">
+              <PerspectiveCard title="Affected Individual" icon="👤" text={result.perspectives.affected_individual} />
+              <PerspectiveCard title="Authority Figure" icon="⚖️" text={result.perspectives.authority} />
+              <PerspectiveCard title="Society" icon="🌍" text={result.perspectives.societal} />
+              <PerspectiveCard title="Ethical Lens" icon="🧭" text={result.perspectives.ethical} />
+            </div>
 
-          {/* 3. Perspectives Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "2rem" }}>
-            <PerspectiveCard title="Affected Individual" icon="👤" text={result.perspectives.affected_individual} />
-            <PerspectiveCard title="Authority Figure" icon="⚖️" text={result.perspectives.authority} />
-            <PerspectiveCard title="Society" icon="🌍" text={result.perspectives.societal} />
-            <PerspectiveCard title="Ethical Lens" icon="🧭" text={result.perspectives.ethical} />
-          </div>
-
-          {/* 4. Assumptions & Tags */}
-          <div style={{ background: "#fafafa", padding: "2rem", borderRadius: "16px" }}>
-            <h4 style={{ margin: "0 0 1rem 0", fontWeight: "bold" }}>Hidden Assumptions</h4>
-            <ul style={{ paddingLeft: "1.5rem", marginBottom: "2rem", color: "#555" }}>
-              {result.assumptions.map((item, i) => (
-                <li key={i} style={{ marginBottom: "0.5rem" }}>{item}</li>
-              ))}
-            </ul>
-
-            <h4 style={{ margin: "0 0 1rem 0", fontWeight: "bold" }}>Cognitive Biases Detected</h4>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-              {result.bias_tags.map((tag, i) => (
-                <span key={i} style={{ background: "#e5e7eb", padding: "0.5rem 1rem", borderRadius: "20px", fontSize: "0.9rem", color: "#374151" }}>
-                  {tag}
-                </span>
-              ))}
+            <div className="bg-white/80 backdrop-blur-sm border border-slate-100 p-10 rounded-[40px] shadow-sm">
+                <div className="mb-8">
+                    <h3 className="text-xl font-semibold mb-4">🪞 The Mirror Reflection</h3>
+                    <p className="text-lg italic text-slate-600 border-l-4 border-slate-200 pl-6">"{result.bias_mirror}"</p>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                    {result.bias_tags.map((tag, i) => (
+                        <span key={i} className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
             </div>
           </div>
-
-        </div>
-      )}
-    </main>
+        )}
+      </main>
+    </div>
   );
 }
 
-// Helper Component for the grid cards
 function PerspectiveCard({ title, text, icon }: { title: string; text: string; icon: string }) {
   return (
-    <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "12px", border: "1px solid #eee", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
-      <div style={{ fontWeight: "bold", marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <span>{icon}</span> {title}
+    <div className="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-xl">{icon}</span>
+        <h4 className="font-bold text-slate-900 text-sm uppercase tracking-tight">{title}</h4>
       </div>
-      <p style={{ fontSize: "0.95rem", color: "#555", margin: 0 }}>{text}</p>
+      <p className="text-slate-600 leading-relaxed text-sm">{text}</p>
     </div>
   );
 }
