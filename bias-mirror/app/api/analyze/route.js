@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export async function POST(req) {
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: "API Key missing" }, { status: 500 });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
     const { input } = await req.json();
 
     if (!input) {
       return NextResponse.json({ error: "Input is required" }, { status: 400 });
     }
 
+    // 1. USE YOUR SPECIFIC MODEL
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash", // <--- Updated to match your list
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -57,9 +62,11 @@ export async function POST(req) {
     `;
 
     const result = await model.generateContent(prompt);
-    const data = result.response.text();
+    
+    // 2. Parse the JSON response
+    const data = JSON.parse(result.response.text());
 
-    return NextResponse.json(JSON.parse(data));
+    return NextResponse.json(data);
 
   } catch (error) {
     console.error("Gemini API Error:", error);

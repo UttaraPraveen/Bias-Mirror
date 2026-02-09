@@ -1,8 +1,7 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
-    '@tailwindcss/postcss': {}, // <--- This fixes the error
+    '@tailwindcss/postcss': {},
   },
 };
-
 export default config;
