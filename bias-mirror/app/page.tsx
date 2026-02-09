@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link"; // Import Link for navigation
 
 interface AnalysisResult {
   neutral_reframe: string;
@@ -40,18 +41,19 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen text-slate-900 selection:bg-indigo-100">
-      {/* Navigation */}
+    <div className="min-h-screen text-slate-900 selection:bg-indigo-100 font-sans">
+      {/* Updated Navigation */}
       <nav className="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-        <div className="flex gap-8 text-sm font-medium text-slate-600 bg-white/50 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 shadow-sm">
-          <span className="cursor-pointer hover:text-black">Tool</span>
-          <span className="cursor-pointer hover:text-black">Science</span>
-          <span className="cursor-pointer hover:text-black">FAQs</span>
-          <span className="cursor-pointer hover:text-black">About</span>
+        <div className="flex gap-1 p-1 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm">
+          <Link href="/about" className="px-6 py-2 rounded-full text-sm font-medium text-slate-600 hover:bg-white hover:text-black transition-all">
+            About
+          </Link>
+          <Link href="/contact" className="px-6 py-2 rounded-full text-sm font-medium text-slate-600 hover:bg-white hover:text-black transition-all">
+            Contact
+          </Link>
         </div>
-        <button className="bg-black text-white px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-slate-800 transition-all">
-          <span>Get Started</span>
-          <span className="text-lg">→</span>
+        <button className="bg-black text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-slate-800 transition-all">
+          Get Started →
         </button>
       </nav>
 
@@ -63,7 +65,7 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Hero Section */}
+        {/* Hero */}
         <h1 className="text-5xl md:text-7xl font-serif font-medium tracking-tight text-slate-900 mb-6 leading-[1.1]">
           See your biases reflected. <br />
           <span className="italic text-slate-700">Shift your view.</span>
@@ -79,7 +81,7 @@ export default function Home() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Enter an opinion (e.g., Remote work makes people lazy...)"
-            className="w-full h-32 p-6 rounded-3xl border border-slate-200 bg-white/70 backdrop-blur-sm shadow-xl focus:ring-2 focus:ring-slate-400 focus:outline-none text-lg transition-all resize-none"
+            className="w-full h-32 p-6 rounded-3xl border border-slate-200 bg-white/70 backdrop-blur-sm shadow-xl focus:ring-2 focus:ring-slate-400 focus:outline-none text-lg transition-all resize-none placeholder:text-slate-400"
           />
           <button
             onClick={handleAnalyze}
@@ -91,7 +93,7 @@ export default function Home() {
           </button>
         </div>
 
-        {/* --- RESULTS SECTION --- */}
+        {/* Results Section */}
         {result && (
           <div className="animate-fade-in space-y-8 text-left">
             <div className="bg-blue-50/50 border border-blue-100 p-8 rounded-[32px]">
